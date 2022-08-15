@@ -24,4 +24,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	FVector VelocityPlatform = FVector (0,100,0);
+	FVector StartLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	double DistanceTravelled;
+
+	UPROPERTY(VisibleAnywhere)
+	double MoveDistance = 150;
 };
