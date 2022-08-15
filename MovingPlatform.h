@@ -22,7 +22,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditAnywhere)
-	FVector MyVector = FVector(4970,-13160,916);
 };
