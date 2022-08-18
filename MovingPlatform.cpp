@@ -25,7 +25,7 @@ void AMovingPlatform::Tick(float DeltaTime)
 	FVector CurrentLocation = GetActorLocation();
 	CurrentLocation += VelocityPlatform * DeltaTime;
 	SetActorLocation(CurrentLocation);
-	DistanceTravelled = FVector::Dist(CurrentLocation,StartLocation);
+	double DistanceTravelled = FVector::Dist(CurrentLocation,StartLocation);
 
 	if (DistanceTravelled > MoveDistance)
 	{
@@ -33,6 +33,8 @@ void AMovingPlatform::Tick(float DeltaTime)
 		StartLocation = StartLocation + MoveDirection * MoveDistance;
 		SetActorLocation(StartLocation);
 		VelocityPlatform = -VelocityPlatform;
+		double Overshoot = DistanceTravelled - MoveDistance;
+		UE_LOG(LogTemp, Warning, TEXT("Overshooting by: %f"), Overshoot);
 	}
 }
 
