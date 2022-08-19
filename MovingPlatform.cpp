@@ -15,26 +15,44 @@ AMovingPlatform::AMovingPlatform()
 void AMovingPlatform::BeginPlay()
 {
 	Super::BeginPlay();
-	StartLocation = GetActorLocation();
 }
 
 // Called every frame
 void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	FVector CurrentLocation = GetActorLocation();
-	CurrentLocation += VelocityPlatform * DeltaTime;
-	SetActorLocation(CurrentLocation);
-	double DistanceTravelled = FVector::Dist(CurrentLocation,StartLocation);
+	MovePlatform(DeltaTime);
+	RotatePlatform(DeltaTime);
+}
 
-	if (DistanceTravelled > MoveDistance)
+void AMovingPlatform::MovePlatform(float DeltaTime)
+{
+	if (ShouldPlatformRotate())
 	{
 		FVector MoveDirection = VelocityPlatform.GetSafeNormal();
 		StartLocation = StartLocation + MoveDirection * MoveDistance;
 		SetActorLocation(StartLocation);
 		VelocityPlatform = -VelocityPlatform;
-		double Overshoot = DistanceTravelled - MoveDistance;
-		UE_LOG(LogTemp, Warning, TEXT("Overshooting by: %f"), Overshoot);
+	}
+	else
+	{
+		FVector CurrentLocation = GetActorLocation();
+		CurrentLocation += VelocityPlatform * DeltaTime;
+		SetActorLocation(CurrentLocation);
 	}
 }
 
+bool AMovingPlatform::ShouldPlatformRotate()
+{
+	return GetDistanceMoved() > MoveDistance;
+}
+
+double AMovingPlatform::GetDistanceMoved()
+{
+	return FVector::Dist(GetActorLocation(),StartLocation);
+}
+ 
+void AMovingPlatform::RotatePlatform(float DeltaTime)
+{
+
+}
