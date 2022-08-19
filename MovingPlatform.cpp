@@ -15,6 +15,9 @@ AMovingPlatform::AMovingPlatform()
 void AMovingPlatform::BeginPlay()
 {
 	Super::BeginPlay();
+	StartLocation = GetActorLocation();
+	FString Name = GetName();
+	UE_LOG(LogTemp, Display, TEXT("Actor is: %s"), *Name);
 }
 
 // Called every frame
@@ -36,23 +39,21 @@ void AMovingPlatform::MovePlatform(float DeltaTime)
 	}
 	else
 	{
-		FVector CurrentLocation = GetActorLocation();
-		CurrentLocation += VelocityPlatform * DeltaTime;
-		SetActorLocation(CurrentLocation);
+		AddActorWorldOffset(VelocityPlatform * DeltaTime);
 	}
 }
 
-bool AMovingPlatform::ShouldPlatformRotate()
+bool AMovingPlatform::ShouldPlatformRotate() const
 {
 	return GetDistanceMoved() > MoveDistance;
 }
 
-double AMovingPlatform::GetDistanceMoved()
+double AMovingPlatform::GetDistanceMoved() const
 {
-	return FVector::Dist(GetActorLocation(),StartLocation);
+	return FVector::Dist(StartLocation, GetActorLocation());
 }
  
 void AMovingPlatform::RotatePlatform(float DeltaTime)
 {
-
+	AddActorLocalRotation(VelocityRotation * DeltaTime);
 }
